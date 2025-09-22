@@ -1,24 +1,34 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+//Ataque moviendose y sin moverse
+//si esta quieto ataca y no puede moverse durante el ataque
+//solo es necesario el debug diciendo que ha atacado al pulsar el boton, pero si haces mas, pues god
+
 public class PlayerControler : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D _rigidbody;
+    private Rigidbody2D _rigidbody;
     //en esta nueva version necesitas poner input actions para hacer movimiento y tal
-    [SerializeField] private InputAction _moveAction;
-    [SerializeField] private Vector2 _moveInput;
-    [SerializeField] private InputAction _jumpAction;
-    [SerializeField] private InputAction _atackAction;
+    private InputAction _moveAction;
+    private Vector2 _moveInput;
+    private InputAction _jumpAction;
+    private InputAction _atackAction;
+    private InputAction _InteractAction;
     [SerializeField] private float _playerVelocity = 5;
     [SerializeField] private float _jumpForce = 3;
     [SerializeField] private float _JumpHeight = 2;
+    [SerializeField] private bool _alreadyLanded = true;
     //public GroundSensor _groundSensor;
-
+    //Ground sensor pro ;P
     [SerializeField] private Transform _sensorPosition;
     [SerializeField] private Vector2 _sensorSize = new Vector2(0.5f, 0.5f);
 
     //Animaciones
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
+    //Interact
+    [SerializeField] private Vector2 _interactionZone = new Vector2(1, 1);
 
     void Awake()
     {
@@ -27,10 +37,10 @@ public class PlayerControler : MonoBehaviour
         _moveAction = InputSystem.actions["Move"];
         _jumpAction = InputSystem.actions["Jump"];
         _atackAction = InputSystem.actions["Attack"];
+        _InteractAction = InputSystem.actions["Interact"];
         //_atackAction = InputSystem.actions.FindAction("Atack"); (Version 2 de lo que comentaba arriba).
         //_groundSensor = GetComponentInChildren<GroundSensor>();
         _animator = GetComponent<Animator>();
-
     }
 
     void Start()
@@ -40,19 +50,22 @@ public class PlayerControler : MonoBehaviour
 
     void Update()
     {
+        _moveInput = _moveAction.ReadValue<Vector2>();
+        //transform.position = transform.position + new Vector3(_moveInput.x, 0, 0) * _playerVelocity * Time.deltaTime;
+
         if (_jumpAction.WasPressedThisFrame() && IsGrounded())
         {
             Jump();
         }
 
+        if (_InteractAction.WasPerformedThisFrame())
+        {
+            Interact();
+        }
+
         Movement();
 
-        _moveInput = _moveAction.ReadValue<Vector2>();
-        Debug.Log(_moveInput);
-
-        //transform.position = transform.position + new Vector3(_moveInput.x, 0, 0) * _playerVelocity * Time.deltaTime;
-
-        _animator.SetBool("IsJumping", false);
+        _animator.SetBool("IsJumping", !IsGrounded());
     }
 
     void FixedUpdate()
@@ -62,8 +75,20 @@ public class PlayerControler : MonoBehaviour
 
     void Jump()
     {
-        _animator.SetBool("IsJumping", true);
         _rigidbody.AddForce(transform.up * Mathf.Sqrt(_JumpHeight * -2 * Physics2D.gravity.y), ForceMode2D.Impulse);
+    }
+
+    void Interact()
+    {
+        Collider2D[] interactables = Physics2D.OverlapBoxAll(transform.position, _interactionZone, 0);
+        foreach (Collider2D Star in interactables)
+        {
+            if (Star.gameObject.tag == "Star")
+            {
+                Debug.Log("Tocando estrella");
+            }
+        }
+        Debug.Log("Cositas");
     }
 
     bool IsGrounded()
@@ -76,14 +101,17 @@ public class PlayerControler : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_sensorPosition.position, _sensorSize); 
+        Gizmos.DrawWireCube(_sensorPosition.position, _sensorSize);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(transform.position, _interactionZone);
+
     }
 
     void Movement()
@@ -102,7 +130,7 @@ public class PlayerControler : MonoBehaviour
         {
             _animator.SetBool("IsRunning", false);
         }
-        
+
     }
 
 }
