@@ -1,11 +1,13 @@
+using System.Collections;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 
 //Ataque moviendose y sin moverse
 //si esta quieto ataca y no puede moverse durante el ataque
 //solo es necesario el debug diciendo que ha atacado al pulsar el boton, pero si haces mas, pues god
+//Patron Singleton, sirve para acceder de forma sencilla a objetos en tu escena, y evita que haya duplicados de ese objeto.
 
 public class PlayerControler : MonoBehaviour
 {
@@ -14,7 +16,6 @@ public class PlayerControler : MonoBehaviour
     private InputAction _moveAction;
     private Vector2 _moveInput;
     private InputAction _jumpAction;
-    private InputAction _atackAction;
     private InputAction _InteractAction;
     [SerializeField] private float _playerVelocity = 5;
     [SerializeField] private float _jumpForce = 3;
@@ -24,11 +25,16 @@ public class PlayerControler : MonoBehaviour
     //Ground sensor pro ;P
     [SerializeField] private Transform _sensorPosition;
     [SerializeField] private Vector2 _sensorSize = new Vector2(0.5f, 0.5f);
-
     //Animaciones
     private Animator _animator;
     //Interact
     [SerializeField] private Vector2 _interactionZone = new Vector2(1, 1);
+    //PlayerLife
+    [SerializeField] private int _playerHealth = 40;
+    //Atack
+    private InputAction _atackAction;
+    [SerializeField] private Transform _attackPosition;
+    [SerializeField] private float _attackRange = 1;
 
     void Awake()
     {
@@ -66,6 +72,11 @@ public class PlayerControler : MonoBehaviour
         Movement();
 
         _animator.SetBool("IsJumping", !IsGrounded());
+
+        if (_atackAction.WasPressedThisFrame())
+        {
+            Attack();
+        }
     }
 
     void FixedUpdate()
@@ -81,14 +92,18 @@ public class PlayerControler : MonoBehaviour
     void Interact()
     {
         Collider2D[] interactables = Physics2D.OverlapBoxAll(transform.position, _interactionZone, 0);
-        foreach (Collider2D Star in interactables)
+        foreach (Collider2D item in interactables)
         {
-            if (Star.gameObject.tag == "Star")
+            if (item.gameObject.tag == "Star")
             {
-                Debug.Log("Tocando estrella");
+                Star starScript = item.gameObject.GetComponent<Star>();
+
+                if (starScript != null)
+                {
+                    starScript.Interaction();
+                }
             }
         }
-        Debug.Log("Cositas");
     }
 
     bool IsGrounded()
@@ -112,6 +127,9 @@ public class PlayerControler : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(transform.position, _interactionZone);
 
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(_attackPosition.position, _attackRange);
+
     }
 
     void Movement()
@@ -132,6 +150,32 @@ public class PlayerControler : MonoBehaviour
         }
 
     }
+
+    /*public void TakeDamage(int damage)
+    {
+        _playerHealth -= damage;
+    }*/
+
+    public void TakeDamage(int damage)
+    {
+        _playerHealth -= damage;
+
+        if (_playerHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Attack()
+    {
+        _animator.SetTrigger("Attack");
+        /*GameObject[] Enemys;
+        foreach (GameObject item in Enemys)
+        {
+            
+        }*/
+    }
+        
 
 }
 
