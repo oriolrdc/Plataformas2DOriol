@@ -17581,7 +17581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 527a137cbe2d8ed468458d1de29caaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _starSFX: {fileID: 8300000, guid: 21b358e6610f0c04ebefdcc12ea84a1e, type: 3}
+  _starSFX: {fileID: 8300000, guid: 4742359603aa02448bb9b846f2ad26da, type: 3}
 --- !u!60 &1699938497
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -18034,7 +18034,7 @@ MonoBehaviour:
   _bgmSource: {fileID: 1736546709}
   _sfxSource: {fileID: 121200597}
   manuBGM: {fileID: 0}
-  gameBGM: {fileID: 8300000, guid: 68e1759ca9da52b46a947c5b0aad21dd, type: 3}
+  gameBGM: {fileID: 8300000, guid: 22affe2678cea0843b75539b52fa28a6, type: 3}
 --- !u!4 &1887023880
 Transform:
   m_ObjectHideFlags: 0
