@@ -29,12 +29,13 @@ public class PlayerControler : MonoBehaviour
     private Animator _animator;
     //Interact
     [SerializeField] private Vector2 _interactionZone = new Vector2(1, 1);
-    //PlayerLife
-    [SerializeField] private int _playerHealth = 40;
     //Atack
     private InputAction _atackAction;
     [SerializeField] private Transform _attackPosition;
     [SerializeField] private float _attackRange = 1;
+    //Vida
+    [SerializeField] private int _maxHeatlh = 40;
+    [SerializeField] private int _currentHealth;
 
     void Awake()
     {
@@ -51,7 +52,7 @@ public class PlayerControler : MonoBehaviour
 
     void Start()
     {
-
+        _currentHealth = _maxHeatlh;
     }
 
     void Update()
@@ -158,12 +159,17 @@ public class PlayerControler : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        _playerHealth -= damage;
+        _currentHealth -= damage;
 
-        if (_playerHealth <= 0)
+        if (_currentHealth <= 0)
         {
-            Destroy(gameObject);
+            Death();
         }
+    }
+
+    void Death()
+    {
+        Destroy(gameObject);
     }
 
     void Attack()
