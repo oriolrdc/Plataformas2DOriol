@@ -161,6 +161,8 @@ public class PlayerControler : MonoBehaviour
     {
         _currentHealth -= damage;
 
+        GUI.Instance.UpdateHealthBar(_currentHealth, _maxHeatlh);
+
         if (_currentHealth <= 0)
         {
             Death();

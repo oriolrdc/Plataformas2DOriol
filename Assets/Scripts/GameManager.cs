@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +7,6 @@ public class GameManager : MonoBehaviour
     //el get private set hace que sea privada para los demas pero publica para este, cositas
     public static GameManager instance { get; private set; }
 
-    [SerializeField] private GameObject _pauseCanvas;
     [SerializeField] InputActionAsset playerInputs;
     private InputAction _pauseInput;
     private bool _isPaused = false;
@@ -59,17 +57,19 @@ public class GameManager : MonoBehaviour
         if (_isPaused)
         {
             Time.timeScale = 1;
-            _pauseCanvas.SetActive(false);
+            GUI.Instance.ChangeCanvasStatus(GUI.Instance._pauseCanvas, false);
             playerInputs.FindActionMap("Player").Enable();
             _isPaused = false;
         }
         else
         {
             Time.timeScale = 0;
-            _pauseCanvas.SetActive(true);
+            GUI.Instance.ChangeCanvasStatus(GUI.Instance._pauseCanvas, true);
             playerInputs.FindActionMap("Player").Disable();
             _isPaused = true;
         }
-        
+
     }
+
+    
 }
