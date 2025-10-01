@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 //Ataque moviendose y sin moverse
 //si esta quieto ataca y no puede moverse durante el ataque
-//solo es necesario el debug diciendo que ha atacado al pulsar el boton, pero si haces mas, pues god
 //Patron Singleton, sirve para acceder de forma sencilla a objetos en tu escena, y evita que haya duplicados de ese objeto.
 
 public class PlayerControler : MonoBehaviour
@@ -34,8 +33,8 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private Transform _attackPosition;
     [SerializeField] private float _attackRange = 1;
     //Vida
-    [SerializeField] private int _maxHeatlh = 40;
-    [SerializeField] private int _currentHealth;
+    [SerializeField] private float _maxHeatlh = 40;
+    [SerializeField] private float _currentHealth;
 
     void Awake()
     {
@@ -160,7 +159,8 @@ public class PlayerControler : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
-
+        float health = _currentHealth / _maxHeatlh;
+        Debug.Log(health);
         GUI.Instance.UpdateHealthBar(_currentHealth, _maxHeatlh);
 
         if (_currentHealth <= 0)

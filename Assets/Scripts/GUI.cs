@@ -32,7 +32,7 @@ public class GUI : MonoBehaviour
         SceneLoader.Instance.ChangeScene(sceneName);
     }
 
-    public void UpdateHealthBar(int currentHealth, int maxHealth)
+    public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         _heathBar.fillAmount = currentHealth / maxHealth;
     }

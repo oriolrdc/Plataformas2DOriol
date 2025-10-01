@@ -7,9 +7,9 @@ public class GameManager : MonoBehaviour
     //el get private set hace que sea privada para los demas pero publica para este, cositas
     public static GameManager instance { get; private set; }
 
-    [SerializeField] InputActionAsset playerInputs;
+    public InputActionAsset playerInputs;
     private InputAction _pauseInput;
-    private bool _isPaused = false;
+    public bool isPaused = false;
     int _stars = 0;
 
     void Awake()
@@ -54,19 +54,19 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        if (_isPaused)
+        if (isPaused)
         {
             Time.timeScale = 1;
             GUI.Instance.ChangeCanvasStatus(GUI.Instance._pauseCanvas, false);
             playerInputs.FindActionMap("Player").Enable();
-            _isPaused = false;
+            isPaused = false;
         }
         else
         {
             Time.timeScale = 0;
             GUI.Instance.ChangeCanvasStatus(GUI.Instance._pauseCanvas, true);
             playerInputs.FindActionMap("Player").Disable();
-            _isPaused = true;
+            isPaused = true;
         }
 
     }
