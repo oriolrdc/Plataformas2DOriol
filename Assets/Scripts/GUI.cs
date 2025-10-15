@@ -4,6 +4,7 @@ public class GUI : MonoBehaviour
 {
     public static GUI Instance;
     public GameObject _pauseCanvas;
+    public GameObject _winCanvas;
     [SerializeField] private Image _heathBar;
 
     void Awake()

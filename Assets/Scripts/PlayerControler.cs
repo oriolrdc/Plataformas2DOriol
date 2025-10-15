@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Xml;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +13,7 @@ using UnityEngine.InputSystem;
 public class PlayerControler : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
+    private CapsuleCollider2D _playerCollider;
     //en esta nueva version necesitas poner input actions para hacer movimiento y tal
     private InputAction _moveAction;
     private Vector2 _moveInput;
@@ -38,10 +41,12 @@ public class PlayerControler : MonoBehaviour
     //Vida
     [SerializeField] private float _maxHeatlh = 40;
     [SerializeField] private float _currentHealth;
+    private float _coldown = 0.5f;
 
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _playerCollider = GetComponent<CapsuleCollider2D>();
         //Esto de abajo es un getcomponent para inputs, los dos son correctos pero mejor usar el de arriba(Move).
         _moveAction = InputSystem.actions["Move"];
         _jumpAction = InputSystem.actions["Jump"];
@@ -76,7 +81,7 @@ public class PlayerControler : MonoBehaviour
 
         _animator.SetBool("IsJumping", !IsGrounded());
 
-        if (_atackAction.WasPressedThisFrame())
+        if (_atackAction.WasPressedThisFrame() && !_isRunning)
         {
             _animator.SetTrigger("Attack");
             Attack();
@@ -177,13 +182,20 @@ public class PlayerControler : MonoBehaviour
 
         if (_currentHealth <= 0)
         {
-            Death();
+            StartCoroutine(Death());
+            _rigidbody.gravityScale = 0;
+            _playerCollider.enabled = false;
         }
     }
 
-    void Death()
+    IEnumerator Death()
     {
-        Destroy(gameObject);
+        _animator.SetBool("Death", true);
+        Destroy(gameObject, 0.5f);
+        Debug.Log("Aquui");
+        yield return new WaitForSeconds(_coldown);
+        Debug.Log("hola");
+        SceneLoader.Instance.ChangeScene("GameOver");
     }
 
     void Attack()

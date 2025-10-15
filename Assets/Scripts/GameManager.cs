@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
     private InputAction _pauseInput;
     public bool isPaused = false;
     int _stars = 0;
+
+    //[SerializeField] List<Collider2D> listaDeEstrellas = new List<Collider2D>();
 
     void Awake()
     {
@@ -44,12 +47,24 @@ public class GameManager : MonoBehaviour
         {
             Pause();
         }
+
+        StarSensor();
     }
 
     public void AddStar()
     {
         _stars++;
-        Debug.Log("Estrellas recogidas: " + _stars);
+    }
+
+    float StarSensor()
+    {
+        GameObject[] stars = GameObject.FindGameObjectsWithTag("Star");
+        if (stars.Length <= 0)
+        {
+            GUI.Instance.ChangeCanvasStatus(GUI.Instance._winCanvas, true);
+        }
+        Debug.Log(stars.Length);
+        return stars.Length;
     }
 
     public void Pause()
@@ -71,5 +86,5 @@ public class GameManager : MonoBehaviour
 
     }
 
-    
+
 }
