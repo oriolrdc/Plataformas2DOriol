@@ -7,8 +7,8 @@ public class EnemyController : MonoBehaviour
     private PlayerControler _playerControler;
     [SerializeField] private int _enemySpeed = 4;
     private int direction = -1;
-    private int _attackDamage = 10;
-    private int _EnemyHealth = 20;
+    private float _attackDamage = 10;
+    [SerializeField] private float _EnemyHealth = 20;
 
     void Awake()
     {
@@ -55,6 +55,21 @@ public class EnemyController : MonoBehaviour
         {
             direction = -1;
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _EnemyHealth -= damage;
+
+        if(_EnemyHealth <= 0)
+        {
+            Death();
+        }
+    }
+
+    void Death()
+    {
+        Destroy(gameObject);
     }
 
     /*void OnCollisionExit2D(Collision2D collision)

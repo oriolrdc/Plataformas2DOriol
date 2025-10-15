@@ -30,8 +30,11 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private Vector2 _interactionZone = new Vector2(1, 1);
     //Atack
     private InputAction _atackAction;
+    [SerializeField] private LayerMask _enemyLayer;
     [SerializeField] private Transform _attackPosition;
     [SerializeField] private float _attackRange = 1;
+    [SerializeField] private float _attackDamage = 10;
+    [SerializeField] private bool _isRunning = false;
     //Vida
     [SerializeField] private float _maxHeatlh = 40;
     [SerializeField] private float _currentHealth;
@@ -75,6 +78,12 @@ public class PlayerControler : MonoBehaviour
 
         if (_atackAction.WasPressedThisFrame())
         {
+            _animator.SetTrigger("Attack");
+            Attack();
+        }
+        else if(_atackAction.WasPressedThisFrame() && _isRunning)
+        {
+            _animator.SetTrigger("MavingAttack");
             Attack();
         }
     }
@@ -136,16 +145,19 @@ public class PlayerControler : MonoBehaviour
     {
         if (_moveInput.x > 0)
         {
+            _isRunning = true;
             _animator.SetBool("IsRunning", true);
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (_moveInput.x < 0)
         {
+            _isRunning = true;
             _animator.SetBool("IsRunning", true);
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         else
         {
+            _isRunning = false;
             _animator.SetBool("IsRunning", false);
         }
 
@@ -156,7 +168,7 @@ public class PlayerControler : MonoBehaviour
         _playerHealth -= damage;
     }*/
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
         float health = _currentHealth / _maxHeatlh;
@@ -176,12 +188,15 @@ public class PlayerControler : MonoBehaviour
 
     void Attack()
     {
-        _animator.SetTrigger("Attack");
-        /*GameObject[] Enemys;
-        foreach (GameObject item in Enemys)
+        Collider2D[] Enemy = Physics2D.OverlapCircleAll(_attackPosition.position, _attackRange, _enemyLayer);
+        foreach (Collider2D item in Enemy)
         {
-            
-        }*/
+            if (item.gameObject.layer == 6)
+            {
+                EnemyController _enemyScript = item.gameObject.GetComponent<EnemyController>();
+                _enemyScript.TakeDamage(_attackDamage);
+            }
+        }
     }
         
 

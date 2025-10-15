@@ -896,8 +896,12 @@ MonoBehaviour:
   _sensorPosition: {fileID: 1026575092}
   _sensorSize: {x: 0.3, y: 0.2}
   _interactionZone: {x: 2, y: 1}
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
   _attackPosition: {fileID: 335245233}
-  _attackRange: 0.5
+  _attackRange: 0.6
+  _attackDamage: 10
   _maxHeatlh: 40
   _currentHealth: 0
 --- !u!95 &433449807
@@ -1198,7 +1202,7 @@ GameObject:
   - component: {fileID: 521312981}
   - component: {fileID: 521312980}
   - component: {fileID: 521312984}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1383,6 +1387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemySpeed: 2
+  _EnemyHealth: 20
 --- !u!1 &666790075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,6 +1835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInputs: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
+  isPaused: 0
 --- !u!4 &1180849231
 Transform:
   m_ObjectHideFlags: 0
