@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int _enemySpeed = 4;
     private int direction = -1;
     private float _attackDamage = 10;
-    [SerializeField] private float _EnemyHealth = 20;
+    [SerializeField] private float _enemyHealth = 20;
 
     void Awake()
     {
@@ -16,12 +16,8 @@ public class EnemyController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _playerControler = GameObject.Find("Player").GetComponent<PlayerControler>();
     }
-    void Start()
-    {
 
-    }
-
-    void Update()
+    void FixedUpdate()
     {
         _rigidBody.linearVelocity = new Vector2(_enemySpeed * direction, _rigidBody.linearVelocity.y);
     }
@@ -59,9 +55,9 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _EnemyHealth -= damage;
+        _enemyHealth -= damage;
 
-        if(_EnemyHealth <= 0)
+        if(_enemyHealth <= 0)
         {
             Death();
         }

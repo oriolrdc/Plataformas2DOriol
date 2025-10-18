@@ -9,15 +9,15 @@ Crear el SoundManager-- FET
 
 Mostrar la UI de victòria (recollim totes les estrelles → UI de victòria)
 
-Mostrar escena de Game Over (si ens quedem sense vida o ens caiem fora de l'escenari → escena de Game Over) --> 
+Mostrar escena de Game Over (si ens quedem sense vida o ens caiem fora de l'escenari → escena de Game Over)
 
-Construir la UI (barra de vida, comptador de monedes, comptador d’estrelles)
+Construir la UI (barra de vida, comptador de monedes, comptador d’estrelles) --> FET
 
-Posar diverses estrelles
+Posar diverses estrelles --> FET
 
 Interacció entre el jugador i la moneda (toques la moneda → es reprodueix un so i s’afegeix una moneda al comptador) --> FET
 
-Interacció entre el jugador i l’estrella (toques l’estrella → augmenta en un el comptador d’estrelles i es reprodueix un so)
+Interacció entre el jugador i l’estrella (toques l’estrella → augmenta en un el comptador d’estrelles i es reprodueix un so) --> FET
 
 Interacció entre el jugador i el mímic (si el mímic et toca, et treu vida; si l’ataces, li treus vida tu a ell) --> FET
 

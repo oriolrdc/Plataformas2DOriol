@@ -31,6 +31,11 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadNewScene(sceneName));
     }
 
+    public void DeathScene()
+    {
+        StartCoroutine(LoadDeathScene());
+    }
+
     IEnumerator LoadNewScene(string sceneName)
     {
         yield return null;
@@ -39,6 +44,41 @@ public class SceneLoader : MonoBehaviour
 
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
+
+        float fakeLoadPercentage = 0;
+
+        while (!asyncLoad.isDone)
+        {
+            //_loadingBar.fillAmount = asyncLoad.progress;
+
+            fakeLoadPercentage += 0.01f;
+            Mathf.Clamp01(fakeLoadPercentage);
+            _loadingBar.fillAmount = fakeLoadPercentage;
+            _loadingText.text = (fakeLoadPercentage * 100).ToString("F0") + "%";
+
+            if (asyncLoad.progress >= 0.9f && fakeLoadPercentage >= 0.99f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+
+        Time.timeScale = 1;
+        GameManager.Instance.playerInputs.FindActionMap("Player").Enable();
+        GameManager.Instance.isPaused = false;
+        _loadingCanvas.SetActive(false);
+    }
+    
+    IEnumerator LoadDeathScene()
+    {
+        yield return null;
+
+        _loadingCanvas.SetActive(true);
+
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameOver");
         asyncLoad.allowSceneActivation = false;
 
         float fakeLoadPercentage = 0;

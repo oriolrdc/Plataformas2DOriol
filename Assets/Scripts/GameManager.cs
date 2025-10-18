@@ -59,15 +59,13 @@ public class GameManager : MonoBehaviour
         GUI.Instance.UpdateCoin();
     }
 
-    /*float StarSensor()
+   /* public void StarSensor()
     {
         GameObject[] stars = GameObject.FindGameObjectsWithTag("Star");
         if (stars.Length <= 0)
         {
             GUI.Instance.ChangeCanvasStatus(GUI.Instance._winCanvas, true);
         }
-        Debug.Log(stars.Length);
-        return stars.Length;
     }*/
 
     public void Pause()

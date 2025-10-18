@@ -43,7 +43,12 @@ public class PlayerControler : MonoBehaviour
     //Vida
     [SerializeField] private float _maxHeatlh = 40;
     [SerializeField] private float _currentHealth;
-    private float _coldown = 0.5f;
+    private float _DeathColdown = 0.5f;
+    //------ AUDIOS ------//
+    [SerializeField] private AudioClip _jumpSFX;
+    [SerializeField] private AudioClip _attackSFX;
+    [SerializeField] private AudioClip _hurtSFX;
+    [SerializeField] private AudioClip _deathSFX;
 
     void Awake()
     {
@@ -108,6 +113,7 @@ public class PlayerControler : MonoBehaviour
 
     void Jump()
     {
+        AudioManager.Instance.ReproduceSound(_jumpSFX);
         _rigidbody.AddForce(transform.up * Mathf.Sqrt(_JumpHeight * -2 * Physics2D.gravity.y), ForceMode2D.Impulse);
     }
 
@@ -209,8 +215,8 @@ public class PlayerControler : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
-        float health = _currentHealth / _maxHeatlh;
-        Debug.Log(health);
+        /*float health = _currentHealth / _maxHeatlh;
+        Debug.Log(health);*/
         GUI.Instance.UpdateHealthBar(_currentHealth, _maxHeatlh);
 
         if (_currentHealth <= 0)
@@ -224,11 +230,11 @@ public class PlayerControler : MonoBehaviour
     IEnumerator Death()
     {
         _animator.SetBool("Death", true);
-        Destroy(gameObject, 0.5f);
         Debug.Log("Aquui");
-        yield return new WaitForSeconds(_coldown);
+        yield return new WaitForSeconds(_DeathColdown);
         Debug.Log("hola");
-        SceneLoader.Instance.ChangeScene("GameOver");
+        SceneLoader.Instance.DeathScene();
+        Destroy(gameObject, 0.5f);
     }
 
     void Attack()

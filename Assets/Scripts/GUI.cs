@@ -37,6 +37,11 @@ public class GUI : MonoBehaviour
         SceneLoader.Instance.ChangeScene(sceneName);
     }
 
+    public void DeathScene()
+    {
+        SceneLoader.Instance.DeathScene();
+    }
+
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         _heathBar.fillAmount = currentHealth / maxHealth;
@@ -46,6 +51,12 @@ public class GUI : MonoBehaviour
     {
         _stars++;
         _starCounter.text = "0" + _stars.ToString();
+
+        if(_stars >= 6)
+        {
+            ChangeCanvasStatus(_winCanvas, true);
+        }
+        //GameManager.Instance.StarSensor();
     }
 
     public void UpdateCoin()
