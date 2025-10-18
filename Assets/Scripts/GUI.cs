@@ -6,6 +6,10 @@ public class GUI : MonoBehaviour
     public GameObject _pauseCanvas;
     public GameObject _winCanvas;
     [SerializeField] private Image _heathBar;
+    private int _stars;
+    [SerializeField] private Text _starCounter;
+    private int _coins;
+    [SerializeField] private Text _coinCounter;
 
     void Awake()
     {
@@ -25,7 +29,7 @@ public class GUI : MonoBehaviour
 
     public void Resume()
     {
-        GameManager.instance.Pause();
+        GameManager.Instance.Pause();
     }
 
     public void ChangeScene(string sceneName)
@@ -36,5 +40,17 @@ public class GUI : MonoBehaviour
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         _heathBar.fillAmount = currentHealth / maxHealth;
+    }
+
+    public void UpdateStars()
+    {
+        _stars++;
+        _starCounter.text = "0" + _stars.ToString();
+    }
+
+    public void UpdateCoin()
+    {
+        _coins++;
+        _coinCounter.text = "0" + _coins.ToString();
     }
 }

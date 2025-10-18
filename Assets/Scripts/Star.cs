@@ -12,8 +12,8 @@ public class Star : MonoBehaviour
     public void Interaction()
     {
         //_gameManager.AddStar();
-        GameManager.instance.AddStar();
-        AudioManager.instance.ReproduceSound(_starSFX);
+        GameManager.Instance.AddStar();
+        AudioManager.Instance.ReproduceSound(_starSFX);
         Destroy(gameObject);
     }
 }

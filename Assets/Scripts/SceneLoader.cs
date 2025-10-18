@@ -61,9 +61,8 @@ public class SceneLoader : MonoBehaviour
         }
         
         Time.timeScale = 1;
-        GameManager.instance.playerInputs.FindActionMap("Player").Enable();
-        GameManager.instance.isPaused = false;
+        GameManager.Instance.playerInputs.FindActionMap("Player").Enable();
+        GameManager.Instance.isPaused = false;
         _loadingCanvas.SetActive(false);
-        
     }
 }

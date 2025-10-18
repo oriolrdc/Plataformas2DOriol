@@ -6,12 +6,11 @@ public class GameManager : MonoBehaviour
 {
     //Variable Static o estatica, se puede acceder a ellas desde cualquier otro script sin tener que hace getComponent y esas shits
     //el get private set hace que sea privada para los demas pero publica para este, cositas
-    public static GameManager instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     public InputActionAsset playerInputs;
     private InputAction _pauseInput;
     public bool isPaused = false;
-    int _stars = 0;
 
     //[SerializeField] List<Collider2D> listaDeEstrellas = new List<Collider2D>();
 
@@ -19,13 +18,13 @@ public class GameManager : MonoBehaviour
     {
         //This is singleton jeje
         //este if busca si ya esta lleno instance, si ya esta lleno comprueba si lo de dentro es este objeto o otro, si es otro se destruye y sino pues rellena instance con el mismo.
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
 
         _pauseInput = InputSystem.actions["Pause"];
@@ -37,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        AudioManager.instance.ChangeBGM(AudioManager.instance.gameBGM);
+        AudioManager.Instance.ChangeBGM(AudioManager.Instance.gameBGM);
 
     }
 
@@ -48,15 +47,19 @@ public class GameManager : MonoBehaviour
             Pause();
         }
 
-        StarSensor();
+        //StarSensor();
     }
 
     public void AddStar()
     {
-        _stars++;
+        GUI.Instance.UpdateStars();
+    }
+    public void AddCoin()
+    {
+        GUI.Instance.UpdateCoin();
     }
 
-    float StarSensor()
+    /*float StarSensor()
     {
         GameObject[] stars = GameObject.FindGameObjectsWithTag("Star");
         if (stars.Length <= 0)
@@ -65,7 +68,7 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(stars.Length);
         return stars.Length;
-    }
+    }*/
 
     public void Pause()
     {

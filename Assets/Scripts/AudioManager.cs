@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance { get; private set; }
+    public static AudioManager Instance { get; private set; }
     [SerializeField] AudioSource _bgmSource;
     [SerializeField] AudioSource _sfxSource;
 
@@ -11,13 +11,13 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
 
         DontDestroyOnLoad(gameObject);

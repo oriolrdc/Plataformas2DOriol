@@ -29,9 +29,11 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private Vector2 _sensorSize = new Vector2(0.5f, 0.5f);
     //Animaciones
     private Animator _animator;
-    //Interact
+    //Interact 
     [SerializeField] private Vector2 _interactionZone = new Vector2(1, 1);
     //Atack
+    private bool _canAttack = true;
+    private float _attackColdown = 0.5f;
     private InputAction _atackAction;
     [SerializeField] private LayerMask _enemyLayer;
     [SerializeField] private Transform _attackPosition;
@@ -83,13 +85,19 @@ public class PlayerControler : MonoBehaviour
 
         if (_atackAction.WasPressedThisFrame() && !_isRunning)
         {
-            _animator.SetTrigger("Attack");
-            Attack();
+            if(_canAttack)
+            {
+                _animator.SetTrigger("Attack");
+                StartCoroutine(AttackColdown());
+            }
         }
         else if(_atackAction.WasPressedThisFrame() && _isRunning)
         {
-            _animator.SetTrigger("MavingAttack");
-            Attack();
+            if(_canAttack)
+            {
+                _animator.SetTrigger("MovingAttack");
+                StartCoroutine(AttackColdown());
+            }
         }
     }
 
@@ -117,6 +125,31 @@ public class PlayerControler : MonoBehaviour
                     starScript.Interaction();
                 }
             }
+            else if (item.gameObject.tag == "Heart")
+            {
+                Heart heartScript = item.gameObject.GetComponent<Heart>();
+
+                if (heartScript != null)
+                {
+                    heartScript.Heal();
+                    Heal();
+                }
+            }
+        }
+    }
+    
+    void Heal()
+    {
+        if(_currentHealth < _maxHeatlh)
+        {
+            _currentHealth += 10;
+
+            if (_currentHealth > _maxHeatlh)
+            {
+                _currentHealth = _maxHeatlh;
+            }
+
+            GUI.Instance.UpdateHealthBar(_currentHealth, _maxHeatlh);
         }
     }
 
@@ -209,6 +242,13 @@ public class PlayerControler : MonoBehaviour
                 _enemyScript.TakeDamage(_attackDamage);
             }
         }
+    }
+
+    IEnumerator AttackColdown()
+    {
+        _canAttack = false;
+        yield return new WaitForSeconds(_attackColdown);
+        _canAttack = true;
     }
         
 
