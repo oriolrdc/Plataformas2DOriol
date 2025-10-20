@@ -8,7 +8,8 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip manuBGM;
     public AudioClip gameBGM;
-
+    public AudioClip deathBGM;
+    
     void Awake()
     {
         if (Instance != null && Instance != this)

@@ -93,6 +93,7 @@ public class PlayerControler : MonoBehaviour
             if(_canAttack)
             {
                 _animator.SetTrigger("Attack");
+                AudioManager.Instance.ReproduceSound(_attackSFX);
                 StartCoroutine(AttackColdown());
             }
         }
@@ -101,6 +102,7 @@ public class PlayerControler : MonoBehaviour
             if(_canAttack)
             {
                 _animator.SetTrigger("MovingAttack");
+                AudioManager.Instance.ReproduceSound(_attackSFX);
                 StartCoroutine(AttackColdown());
             }
         }
@@ -218,7 +220,7 @@ public class PlayerControler : MonoBehaviour
         /*float health = _currentHealth / _maxHeatlh;
         Debug.Log(health);*/
         GUI.Instance.UpdateHealthBar(_currentHealth, _maxHeatlh);
-
+        AudioManager.Instance.ReproduceSound(_hurtSFX);
         if (_currentHealth <= 0)
         {
             StartCoroutine(Death());
@@ -229,6 +231,7 @@ public class PlayerControler : MonoBehaviour
 
     IEnumerator Death()
     {
+        AudioManager.Instance.ReproduceSound(_deathSFX);
         _animator.SetBool("Death", true);
         Debug.Log("Aquui");
         yield return new WaitForSeconds(_DeathColdown);

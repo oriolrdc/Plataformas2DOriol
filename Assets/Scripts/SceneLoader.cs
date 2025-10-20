@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance;
+    public GameObject _DeathTransition;
 
     [SerializeField] private GameObject _loadingCanvas;
     [SerializeField] private Image _loadingBar;
@@ -73,36 +74,9 @@ public class SceneLoader : MonoBehaviour
     
     IEnumerator LoadDeathScene()
     {
-        yield return null;
-
-        _loadingCanvas.SetActive(true);
-
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameOver");
-        asyncLoad.allowSceneActivation = false;
-
-        float fakeLoadPercentage = 0;
-
-        while (!asyncLoad.isDone)
-        {
-            //_loadingBar.fillAmount = asyncLoad.progress;
-
-            fakeLoadPercentage += 0.01f;
-            Mathf.Clamp01(fakeLoadPercentage);
-            _loadingBar.fillAmount = fakeLoadPercentage;
-            _loadingText.text = (fakeLoadPercentage * 100).ToString("F0") + "%";
-
-            if (asyncLoad.progress >= 0.9f && fakeLoadPercentage >= 0.99f)
-            {
-                asyncLoad.allowSceneActivation = true;
-            }
-
-            yield return new WaitForSecondsRealtime(0.05f);
-        }
-        
-        Time.timeScale = 1;
-        GameManager.Instance.playerInputs.FindActionMap("Player").Enable();
-        GameManager.Instance.isPaused = false;
-        _loadingCanvas.SetActive(false);
+        GUI.Instance.ChangeCanvasStatus(_DeathTransition, true);
+        AudioManager.Instance.ChangeBGM(AudioManager.Instance.deathBGM);
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("GameOver");
     }
 }
